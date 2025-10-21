@@ -1,0 +1,119 @@
+{
+  "faction": "Astra Militarum",
+  "units": [
+    {
+      "name": "Commissar",
+      "M": "6\"",
+      "T": 3,
+      "SV": "5+",
+      "W": 3,
+      "LD": 6,
+      "OC": 1,
+      "weapons": [
+        {
+          "name": "Bolt Pistol",
+          "type": "Pistol 1",
+          "range": "12\"",
+          "A": 1,
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        {
+          "name": "Power Sword",
+          "type": "Melee",
+          "A": 3,
+          "WS": "3+",
+          "S": 4,
+          "AP": -3,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Summary Execution — Once per battle round, when a friendly Astra Militarum unit fails a Battle-shock test within 6\" of this model, one model is destroyed and the test is treated as passed.",
+        "Leader — Can attach to Infantry Squads or Cadian Shock Troops."
+      ]
+    },
+    {
+      "name": "Cadian Shock Troops",
+      "M": "6\"",
+      "T": 3,
+      "SV": "5+",
+      "W": 1,
+      "LD": 7,
+      "OC": 2,
+      "weapons": [
+        {
+          "name": "Lasgun",
+          "type": "Rapid Fire 1",
+          "range": "24\"",
+          "A": 1,
+          "BS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        {
+          "name": "Frag Grenade",
+          "type": "Grenade D6",
+          "range": "24\"",
+          "A": "D6",
+          "BS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Born Soldiers — Each time a model in this unit makes a ranged attack, a hit roll of 6 scores one additional hit.",
+        "Objective Secured — Counts as 2 OC per model when controlling objectives."
+      ]
+    },
+    {
+      "name": "Leman Russ Battle Tank",
+      "M": "10\"",
+      "T": 11,
+      "SV": "2+",
+      "W": 13,
+      "LD": 6,
+      "OC": 3,
+      "weapons": [
+        {
+          "name": "Battle Cannon",
+          "type": "Blast",
+          "range": "72\"",
+          "A": "D6+3",
+          "BS": "4+",
+          "S": 10,
+          "AP": -2,
+          "D": "D3"
+        },
+        {
+          "name": "Lascannon",
+          "type": "Heavy 1",
+          "range": "48\"",
+          "A": 1,
+          "BS": "4+",
+          "S": 12,
+          "AP": -3,
+          "D": "D6"
+        },
+        {
+          "name": "Heavy Bolter (sponson)",
+          "type": "Heavy 3",
+          "range": "36\"",
+          "A": 3,
+          "BS": "4+",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Armoured Might — Can fire its turret weapon even if it Advanced.",
+        "Explodes — When destroyed, roll one D6; on a 6 it explodes, dealing D3 mortal wounds to nearby units within 6\"."
+      ]
+    }
+  ]
+}
