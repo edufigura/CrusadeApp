@@ -4,13 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.crusadeapp.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel (private val repository: UserRepository) : ViewModel(){
+
+
 //MutableStateFlow es un flujo de datos que podria cambiar con el tiempo. Idealmente para mantener estados en compose
     val name  = MutableStateFlow("")
     val email = MutableStateFlow("")
-    val fotoUri = MutableStateFlow<String?>(null)
+
+
+    //Estado privado para la foto del usuario.
+    private val _fotoUri = MutableStateFlow<String?>(null)
+    val fotoUri = _fotoUri.asStateFlow()
 
 
     //Se activa una corrutina y se guarda el usuario en Localstorage
@@ -34,7 +41,7 @@ class UserViewModel (private val repository: UserRepository) : ViewModel(){
     fun actualizarFoto(uri: String){
         viewModelScope.launch {
             repository.saveUser(name.value, email.value, uri)
-            fotoUri.value = uri
+            _fotoUri.value = uri
         }
     }
 

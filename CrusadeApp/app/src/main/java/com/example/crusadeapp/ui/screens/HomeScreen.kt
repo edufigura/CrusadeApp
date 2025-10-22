@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -13,10 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.crusadeapp.viewmodel.UserViewModel
 
 // Data class para elementos de la lista
@@ -35,6 +38,10 @@ fun HomeScreen(
     onNavigateList: () -> Unit
 ) {
     val name = viewModel.name.collectAsState().value
+    // aca se obtiene el Uri de la foto
+
+    val fotoUri = viewModel.fotoUri.collectAsState().value
+
 
     // Datos de ejemplo para las cruzadas
     val crusadeItems = listOf(
@@ -90,17 +97,27 @@ fun HomeScreen(
                 )
             }
 
-            // Botón de perfil en esquina superior derecha
+            // Botón de perfil en esquina superior derecha CON FOTO O ICONO
             IconButton(
                 onClick = onNavigateProfile,
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Perfil",
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp)
-                )
+                if (fotoUri != null) {
+                    AsyncImage(
+                        model = fotoUri,
+                        contentDescription = "Perfil",
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Perfil",
+                        tint = Color.White,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
             }
         }
 
@@ -272,4 +289,3 @@ fun CrusadeCard(
         }
     }
 }
-

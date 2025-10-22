@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     LoginScreen(
                         viewModel = userViewModel,
                         onNavigateRegister = { navController.navigate("register") },
-                        onNavigateHome = { navController.navigate("home") } // Cambiado a home
+                        onNavigateHome = { navController.navigate("home") }
                     )
                 }
 
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     RegisterScreen(
                         viewModel = userViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateHome = { navController.navigate("home") } // Cambiado a home
+                        onNavigateHome = { navController.navigate("home") }
                     )
                 }
 
@@ -75,8 +75,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable("list") {
-                    // Aquí debes llamar a la función Composable de tu pantalla de lista.
-                    // Suponiendo que se llama ListScreen y no necesita parámetros por ahora:
                     ListScreen()
                 }
             }
