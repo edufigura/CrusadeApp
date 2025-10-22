@@ -114,6 +114,110 @@
         "Armoured Might — Can fire its turret weapon even if it Advanced.",
         "Explodes — When destroyed, roll one D6; on a 6 it explodes, dealing D3 mortal wounds to nearby units within 6\"."
       ]
+    },
+    {
+      "name": "Rogal Dorn Battle Tank",
+      "M": "10\"",
+      "T": 12,
+      "SV": "2+",
+      "W": 14,
+      "LD": 6,
+      "OC": 3,
+      "weapons": [
+        {
+          "name": "Dreadnought Cannon",
+          "type": "Blast",
+          "range": "72\"",
+          "A": "D6+4",
+          "BS": "3+",
+          "S": 11,
+          "AP": -3,
+          "D": "D6"
+        },
+        {
+          "name": "Heavy Bolter",
+          "type": "Heavy 3",
+          "range": "36\"",
+          "A": 3,
+          "BS": "4+",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Master of Armoured Warfare — Can fire all weapons even if it Advanced.",
+        "Unstoppable — Ignores morale tests while this model is on the battlefield."
+      ]
+    },
+    {
+      "name": "Scout Sentinel",
+      "M": "12\"",
+      "T": 3,
+      "SV": "5+",
+      "W": 1,
+      "LD": 7,
+      "OC": 1,
+      "weapons": [
+        {
+          "name": "Autocannon",
+          "type": "Heavy 1",
+          "range": "48\"",
+          "A": 1,
+          "BS": "4+",
+          "S": 6,
+          "AP": -1,
+          "D": "D3"
+        },
+        {
+          "name": "Heavy Stubber",
+          "type": "Heavy 1",
+          "range": "36\"",
+          "A": 1,
+          "BS": "5+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Skirmisher — Can move and fire Heavy weapons without penalty.",
+        "Recon — Counts as 2 OC per model when controlling objectives."
+      ]
+    },
+    {
+      "name": "Ursula Creed",
+      "M": "6\"",
+      "T": 3,
+      "SV": "4+",
+      "W": 2,
+      "LD": 8,
+      "OC": 1,
+      "weapons": [
+        {
+          "name": "Laspistol",
+          "type": "Pistol 1",
+          "range": "12\"",
+          "A": 1,
+          "BS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        {
+          "name": "Power Sword",
+          "type": "Melee",
+          "A": 3,
+          "WS": "3+",
+          "S": 4,
+          "AP": -3,
+          "D": 1
+        }
+      ],
+      "abilities": [
+        "Master Strategist — Can grant rerolls to nearby Astra Militarum units.",
+        "Leader — Can attach to Infantry Squads or specialised units."
+      ]
     }
   ]
 }
