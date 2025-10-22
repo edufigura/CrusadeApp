@@ -11,16 +11,31 @@ import kotlinx.coroutines.launch
 class ListViewModel(private val repository: ListRepository) : ViewModel() {
 
     private val _faction = MutableStateFlow<Faction?>(null)
-    val faction: StateFlow<Faction?> get() = _faction
+    val faction: StateFlow<Faction?> = _faction
 
     fun loadData() {
         viewModelScope.launch {
-            try {
-                _faction.value = repository.getFactionData()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _faction.value = null
+            val data = repository.getFactionData() // JSON cargado desde assets/raw
+            // Inicializar modificadores para cada unidad
+            val unitsWithModifiers = data.units.map { unit ->
+                unit.copy(modifiers = mutableMapOf(
+                    "M" to "+0", "T" to "+0", "SV" to "+0",
+                    "W" to "+0", "LD" to "+0", "OC" to "+0"
+                ))
             }
+            _faction.value = data.copy(units = unitsWithModifiers)
         }
     }
+
+    fun updateModifier(unitName: String, stat: String, newValue: String) {
+        val currentFaction = _faction.value ?: return
+        val updatedUnits = currentFaction.units.map { unit ->
+            if (unit.name == unitName) {
+                unit.apply { modifiers[stat] = newValue }
+            } else unit
+        }
+        _faction.value = currentFaction.copy(units = updatedUnits)
+    }
 }
+
+

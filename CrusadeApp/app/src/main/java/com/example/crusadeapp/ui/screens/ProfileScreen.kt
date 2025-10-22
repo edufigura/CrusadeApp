@@ -32,8 +32,8 @@ import java.io.File
 @Composable
 fun ProfileScreen(
     viewModel: UserViewModel,
-    onBack: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onNavigateHome: () -> Unit
 ) {
     val name = viewModel.name.collectAsState().value
     val email = viewModel.email.collectAsState().value
@@ -110,21 +110,8 @@ fun ProfileScreen(
             .padding(horizontal = 24.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Botom volver atras
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            contentAlignment = Alignment.TopStart
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver",
-                    tint = Color.Black
-                )
-            }
-        }
+        Spacer(modifier = Modifier.height(4.dp))
+        BackToHomeButton(onNavigateHome = onNavigateHome)
 
         // Titulo
         Text(
@@ -200,7 +187,7 @@ fun ProfileScreen(
         // Boton para cerrar sesion
         Button(
             onClick = {
-                viewModel.register("", "")
+                viewModel.register("", "", "")
                 onLogout()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C83FD))
@@ -208,4 +195,7 @@ fun ProfileScreen(
             Text("Cerrar sesión", color = Color.White, fontSize = 16.sp)
         }
     }
+
 }
+
+

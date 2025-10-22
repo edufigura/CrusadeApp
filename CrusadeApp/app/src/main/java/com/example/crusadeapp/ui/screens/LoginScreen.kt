@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crusadeapp.viewmodel.UserViewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun LoginScreen(
@@ -40,6 +41,13 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    // En Jetpack Compose, hay que convertir el StateFlow a un State observable con collectAsState(),
+    // así Compose puede reaccionar automáticamente a los cambios.
+    val isLoggedIn by viewModel?.isLoggedIn?.collectAsState(initial = false)
+        ?: remember { mutableStateOf(false) }
+
+    val errorMessage by viewModel?.errorMessage?.collectAsState(initial = null)
+        ?: remember { mutableStateOf(null) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,13 +114,27 @@ fun LoginScreen(
         Button(
             onClick = {
                 viewModel?.login(email, password)
-                onNavigateHome()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9FA8DA)),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
             Text("Iniciar Sesión", color = Color.White)
+        }
+
+        LaunchedEffect(isLoggedIn) {
+            if (isLoggedIn) {
+                onNavigateHome()
+            }
+        }
+
+        errorMessage?.let { msg ->
+            Text(
+                text = msg,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))

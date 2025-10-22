@@ -39,9 +39,9 @@ fun RegisterScreen(
     onNavigateBack: () -> Unit,
     onNavigateHome: () -> Unit = {}
 ) {
+    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -50,7 +50,7 @@ fun RegisterScreen(
             .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Botón de volver
+        // 🔹 Botón de volver
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,7 +68,7 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Título
+        // 🔹 Título
         Text(
             text = "Registro",
             fontSize = 24.sp,
@@ -79,11 +79,29 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Campo Email
+        // 🔹 Campo Nombre de usuario
+        TextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Nombre de usuario") },
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xFFD9D9D9),
+                unfocusedContainerColor = Color(0xFFD9D9D9),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 Campo Email
         TextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("ej: lucario@dominio.cl") },
+            label = { Text("Correo electrónico") },
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             colors = TextFieldDefaults.colors(
@@ -97,30 +115,11 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo Contraseña
+        // 🔹 Campo Contraseña
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Inserte Contraseña") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            shape = RoundedCornerShape(10.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFD9D9D9),
-                unfocusedContainerColor = Color(0xFFD9D9D9),
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Campo Confirmar Contraseña
-        TextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = { Text("Inserte Contraseña Nuevamente") },
+            label = { Text("Contraseña") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             shape = RoundedCornerShape(10.dp),
@@ -135,11 +134,11 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Botón Registrarse
+        // 🔹 Botón Registrarse
         Button(
             onClick = {
-                if (password == confirmPassword && email.isNotBlank()) {
-                    viewModel.register(email, password)
+                if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
+                    viewModel.register(username, email, password)
                     onNavigateHome()
                 }
             },

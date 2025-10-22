@@ -65,17 +65,21 @@ class MainActivity : ComponentActivity() {
                 composable("profile") {
                     ProfileScreen(
                         viewModel = userViewModel,
-                        onBack = { navController.popBackStack() },
                         onLogout = {
+                            userViewModel.logout()
                             navController.navigate("login") {
-                                popUpTo("home") { inclusive = true }
+                                popUpTo("login") { inclusive = true }
                             }
-                        }
+                        },
+                        onNavigateHome = { navController.navigate("home") }
                     )
                 }
 
                 composable("list") {
-                    ListScreen()
+                    ListScreen(
+                        onNavigateHome = { navController.navigate("home") }
+                    )
+
                 }
             }
         }

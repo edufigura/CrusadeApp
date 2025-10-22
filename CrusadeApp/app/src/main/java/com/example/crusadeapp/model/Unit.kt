@@ -15,7 +15,10 @@ data class UnitData(
     val LD: Int,
     val OC: Int,
     val weapons: List<Weapon>,
-    val abilities: List<String>
+    val abilities: List<String>,
+    val modifiers: MutableMap<String, String> = mutableMapOf(
+        "M" to "+0", "T" to "+0", "SV" to "+0", "W" to "+0", "LD" to "+0", "OC" to "+0"
+    )
 )
 // Las armas tambien poseen caracteristicas
 data class Weapon(

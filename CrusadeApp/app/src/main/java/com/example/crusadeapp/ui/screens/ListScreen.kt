@@ -5,9 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.crusadeapp.viewmodel.ListViewModel
@@ -15,7 +19,9 @@ import com.example.crusadeapp.repository.ListRepository
 import com.example.crusadeapp.model.UnitData
 
 @Composable
-fun ListScreen() {
+fun ListScreen(
+    onNavigateHome: () -> Unit
+) {
     val context = LocalContext.current
     val repository = remember { ListRepository(context) }
 
@@ -28,23 +34,32 @@ fun ListScreen() {
 
     val faction by viewModel.faction.collectAsState()
 
+
     Surface(modifier = Modifier.fillMaxSize()) {
         faction?.let { f ->
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
+                Spacer(modifier = Modifier.height(8.dp))
+                BackToHomeButton(onNavigateHome = onNavigateHome)
+
                 Text(
                     text = f.faction,
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
                 LazyColumn {
                     items(f.units.size) { index ->
-                        ExpandableUnitCard(f.units[index])
+                        ExpandableUnitCard(
+                            unit = f.units[index],
+                            viewModel = viewModel
+                        )
                     }
                 }
             }
         } ?: Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = androidx.compose.ui.Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
             Text("Cargando datos...")
         }
@@ -52,18 +67,8 @@ fun ListScreen() {
 }
 
 @Composable
-fun ExpandableUnitCard(unit: UnitData) {
+fun ExpandableUnitCard(unit: UnitData, viewModel: ListViewModel) {
     var expanded by remember { mutableStateOf(false) }
-
-    // Mapa de modificadores (uno por stat)
-    var modifiers by remember {
-        mutableStateOf(
-            mutableMapOf(
-                "M" to "+0", "T" to "+0", "SV" to "+0",
-                "W" to "+0", "LD" to "+0", "OC" to "+0"
-            )
-        )
-    }
 
     Card(
         modifier = Modifier
@@ -75,9 +80,9 @@ fun ExpandableUnitCard(unit: UnitData) {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(text = unit.name, style = MaterialTheme.typography.titleLarge)
+
             if (expanded) {
                 Spacer(Modifier.height(8.dp))
-
                 Text("Stats", style = MaterialTheme.typography.titleMedium)
 
                 // Fila de stats con modificadores
@@ -85,28 +90,30 @@ fun ExpandableUnitCard(unit: UnitData) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    StatItem("M", unit.M, modifiers["M"] ?: "+0") { newValue ->
-                        modifiers["M"] = newValue
-                    }
-                    StatItem("T", unit.T.toString(), modifiers["T"] ?: "+0") { newValue ->
-                        modifiers["T"] = newValue
-                    }
-                    StatItem("SV", unit.SV, modifiers["SV"] ?: "+0") { newValue ->
-                        modifiers["SV"] = newValue
-                    }
-                    StatItem("W", unit.W.toString(), modifiers["W"] ?: "+0") { newValue ->
-                        modifiers["W"] = newValue
-                    }
-                    StatItem("LD", unit.LD.toString(), modifiers["LD"] ?: "+0") { newValue ->
-                        modifiers["LD"] = newValue
-                    }
-                    StatItem("OC", unit.OC.toString(), modifiers["OC"] ?: "+0") { newValue ->
-                        modifiers["OC"] = newValue
+                    unit.modifiers.forEach { (stat, modValue) ->
+                        val originalValue = when (stat) {
+                            "M" -> unit.M.toString()
+                            "T" -> unit.T.toString()
+                            "SV" -> unit.SV.toString()
+                            "W" -> unit.W.toString()
+                            "LD" -> unit.LD.toString()
+                            "OC" -> unit.OC.toString()
+                            else -> ""
+                        }
+
+                        StatItem(
+                            label = stat,
+                            value = originalValue,
+                            modifierValue = modValue
+                        ) { newValue ->
+                            viewModel.updateModifier(unit.name, stat, newValue)
+                        }
                     }
                 }
 
                 Spacer(Modifier.height(8.dp))
 
+                // Weapons
                 Text("Weapons:", style = MaterialTheme.typography.titleMedium)
                 unit.weapons.forEach { weapon ->
                     Text("- ${weapon.name} (${weapon.type}) S:${weapon.S}, AP:${weapon.AP}, D:${weapon.D}")
@@ -114,6 +121,7 @@ fun ExpandableUnitCard(unit: UnitData) {
 
                 Spacer(Modifier.height(6.dp))
 
+                // Abilities
                 Text("Abilities:", style = MaterialTheme.typography.titleMedium)
                 unit.abilities.forEach { ability ->
                     Text("- $ability")
@@ -123,23 +131,24 @@ fun ExpandableUnitCard(unit: UnitData) {
     }
 }
 
+
+
 @Composable
 fun StatItem(label: String, value: String, modifierValue: String, onModifierChange: (String) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
 
-    Column(horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(label, style = MaterialTheme.typography.labelMedium)
         Box(
             modifier = Modifier
                 .padding(2.dp)
                 .size(width = 40.dp, height = 32.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.small),
-            contentAlignment = androidx.compose.ui.Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
             Text(value)
         }
 
-        // Círculo del modificador
         Surface(
             color = MaterialTheme.colorScheme.secondaryContainer,
             shape = MaterialTheme.shapes.extraLarge,
@@ -154,7 +163,6 @@ fun StatItem(label: String, value: String, modifierValue: String, onModifierChan
         }
     }
 
-    // Diálogo para editar modificador
     if (showDialog) {
         var inputValue by remember { mutableStateOf(modifierValue) }
         AlertDialog(
@@ -177,5 +185,27 @@ fun StatItem(label: String, value: String, modifierValue: String, onModifierChan
                 )
             }
         )
+    }
+}
+
+
+@Composable
+fun BackToHomeButton(
+    onNavigateHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
+        contentAlignment = Alignment.TopStart
+    ) {
+        IconButton(onClick = onNavigateHome) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Volver al Home",
+                tint = Color.Black
+            )
+        }
     }
 }
