@@ -1,4 +1,4 @@
-package com.example.crusadeapp.ui.navigation
+package com.example.crusadeapp.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,16 +17,33 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.crusadeapp.ui.screens.*
 import com.example.crusadeapp.viewmodel.UserViewModel
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavigation(navController: NavHostController, userViewModel: UserViewModel){
-    NavHost(navController = navController, startDestination = "login") {
+
+    NavHost(navController = navController, startDestination = "splash") {
+
+        composable("splash") {
+            SplashScreen()
+            LaunchedEffect(Unit) {
+                delay(2000)
+                navController.navigate("login") {
+                    popUpTo("splash") { inclusive = true }
+                }
+            }
+        }
 
         composable("login") {
             LoginScreen(
                 viewModel = userViewModel,
                 onNavigateRegister = { navController.navigate("register") },
-                onNavigateHome = { navController.navigate("home") }
+                onNavigateHome = {
+                    navController.navigate("home") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                }
             )
         }
 
@@ -34,10 +51,22 @@ fun AppNavigation(navController: NavHostController, userViewModel: UserViewModel
             RegisterScreen(
                 viewModel = userViewModel,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateHome = { navController.navigate("home") }
+                onNavigateLogin = {
+                    navController.navigate("login") {
+                        popUpTo("login") { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 
+        composable("home") {
+            HomeScreen(
+                viewModel = userViewModel,
+                onNavigateProfile = { navController.navigate("profile") },
+                onNavigateList = { navController.navigate("list") }
+            )
+        }
         composable("profile") {
             ProfileScreen(
                 viewModel = userViewModel,
@@ -51,21 +80,11 @@ fun AppNavigation(navController: NavHostController, userViewModel: UserViewModel
             )
         }
 
-
-        // Nueva ruta para la pantalla de unidades
         composable("list") {
             ListScreen(
                 onNavigateHome = { navController.navigate("home") }
             )
 
-        }
-
-        composable("home") {
-            HomeScreen(
-                viewModel = userViewModel,
-                onNavigateProfile = { navController.navigate("profile") },
-                onNavigateList = { navController.navigate("list") }
-            )
         }
 
     }

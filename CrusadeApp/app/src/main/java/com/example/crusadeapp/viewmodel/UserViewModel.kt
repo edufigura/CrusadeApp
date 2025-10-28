@@ -29,7 +29,7 @@ class UserViewModel (private val repository: UserRepository) : ViewModel(){
             this@UserViewModel.name.value = name
             this@UserViewModel.email.value = email
             this@UserViewModel.password.value = password
-            isLoggedIn.value = true
+            isLoggedIn.value = false
         }
     }
 

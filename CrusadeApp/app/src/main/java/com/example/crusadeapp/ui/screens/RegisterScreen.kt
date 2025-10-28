@@ -37,7 +37,7 @@ import com.example.crusadeapp.viewmodel.UserViewModel
 fun RegisterScreen(
     viewModel: UserViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateHome: () -> Unit = {}
+    onNavigateLogin: () -> Unit = {}
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -139,7 +139,7 @@ fun RegisterScreen(
             onClick = {
                 if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
                     viewModel.register(username, email, password)
-                    onNavigateHome()
+                    onNavigateLogin()
                 }
             },
             shape = RoundedCornerShape(8.dp),
