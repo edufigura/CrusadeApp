@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crusadeapp.viewmodel.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.crusadeapp.R
 
@@ -45,140 +48,178 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // En Jetpack Compose, hay que convertir el StateFlow a un State observable con collectAsState(),
-    // así Compose puede reaccionar automáticamente a los cambios.
     val isLoggedIn by viewModel?.isLoggedIn?.collectAsState(initial = false)
         ?: remember { mutableStateOf(false) }
 
     val errorMessage by viewModel?.errorMessage?.collectAsState(initial = null)
         ?: remember { mutableStateOf(null) }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    // Cuadrado con los items
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+
     ) {
-
-        Text(
-            text = "Crusade Manager",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
         Image(
-            painter = painterResource(id = R.drawable.crusade),
-            contentDescription = "Logo",
-            modifier = Modifier.size(150.dp)
+            painter = painterResource(id = R.drawable.background_warhammer),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(
-            text = "Login",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Campo Email
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("ej: tuEmail@dominio.cl") },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFE0E0E0),
-                unfocusedContainerColor = Color(0xFFE0E0E0),
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(8.dp),
+        // Capa oscura para mejorar contraste
+        Box(
             modifier = Modifier
-                .padding(vertical = 4.dp)
-                .fillMaxWidth(0.85f)
+                .fillMaxSize()
+                .background(Color(0xAA000000))
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Campo Password
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("ej: tuContraseña123") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFE0E0E0),
-                unfocusedContainerColor = Color(0xFFE0E0E0),
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(8.dp),
+        // Tarjeta principal
+        Column(
             modifier = Modifier
-                .padding(vertical = 4.dp)
-                .fillMaxWidth(0.85f)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Botón Iniciar Sesión
-        Button(
-            onClick = {
-                viewModel?.login(email, password)
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9FA8DA)),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth(0.6f)
+                .fillMaxWidth()
+                .padding(32.dp)
+                .background(
+                    Color(0xAA1C1C1E),
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Iniciar Sesión", color = Color.White)
-        }
 
-        LaunchedEffect(isLoggedIn) {
-            if (isLoggedIn) {
-                onNavigateHome()
-            }
-        }
-
-        errorMessage?.let { msg ->
+            // Título
             Text(
-                text = msg,
-                color = Color.Red,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 8.dp)
+                text = "Crusade Manager",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.crusade),
+                contentDescription = "Logo",
+                modifier = Modifier.size(130.dp)
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            Text(
+                text = "Iniciar Sesión",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFB0BEC5)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Email
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("ej: tuEmail@dominio.cl") },
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0x33FFFFFF),
+                    unfocusedContainerColor = Color(0x22FFFFFF),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedLabelColor = Color(0xFFB0BEC5),
+                    unfocusedLabelColor = Color(0xFFB0BEC5),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Password
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("ej: tuContraseña123") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0x33FFFFFF),
+                    unfocusedContainerColor = Color(0x22FFFFFF),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedLabelColor = Color(0xFFB0BEC5),
+                    unfocusedLabelColor = Color(0xFFB0BEC5),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Botón Login (gradiente)
+            Button(
+                onClick = { viewModel?.login(email, password) },
+                modifier = Modifier.fillMaxWidth(0.7f),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                listOf(
+                                    Color(0xFF5C6BC0),
+                                    Color(0xFF3949AB)
+                                )
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(vertical = 10.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Iniciar Sesión", color = Color.White)
+                }
+            }
+
+            if (isLoggedIn) {
+                LaunchedEffect(true) { onNavigateHome() }
+            }
+
+            errorMessage?.let { msg ->
+                Text(
+                    text = msg,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón Registrarse
+            Text(
+                text = "¿No tienes cuenta? Regístrate",
+                color = Color(0xFF90CAF9),
+                modifier = Modifier.clickable { onNavigateRegister() }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Olvidaste contraseña
+            Text(
+                text = "¿Olvidaste tu contraseña?",
+                color = Color(0xFF80DEEA),
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.clickable { /* TODO */ }
             )
         }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Botón Registrarse
-        Button(
-            onClick = { onNavigateRegister() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9FA8DA)),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth(0.6f)
-        ) {
-            Text("Registrarse", color = Color.White)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Enlace "Olvidaste Contraseña?"
-        Text(
-            text = "¿Olvidaste Contraseña?",
-            color = Color(0xFF1565C0),
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.clickable { /* TODO: acción */ }
-        )
     }
 }
+

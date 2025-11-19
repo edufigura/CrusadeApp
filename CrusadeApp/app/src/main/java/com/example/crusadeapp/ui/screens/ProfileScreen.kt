@@ -106,28 +106,28 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(0xFF121212))
             .padding(horizontal = 24.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(4.dp))
         BackToHomeButton(onNavigateHome = onNavigateHome)
 
-        // Titulo
+        // Título
         Text(
             text = "Perfil de Usuario",
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = Color.White,
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // Imagen del perfil (si existe fotoUri)
+        // Caja de perfil con fondo más claro
         Box(
             modifier = Modifier
                 .size(140.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFD9D9D9)),
+                .background(Color(0xFF1E1E1E)),
             contentAlignment = Alignment.Center
         ) {
             if (!fotoUri.isNullOrBlank()) {
@@ -141,18 +141,18 @@ fun ProfileScreen(
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Perfil",
-                    tint = Color.DarkGray,
+                    tint = Color(0xFFB0B0B0),
                     modifier = Modifier.size(80.dp)
                 )
             }
 
-            // 🔧 Botón flotante para cambiar foto
+            // Botón flotante para cambiar foto
             IconButton(
                 onClick = { showDialog = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .size(44.dp)
-                    .background(Color.White, CircleShape)
+                    .background(Color(0xFF2C2C2C), CircleShape)
                     .padding(4.dp)
             ) {
                 Icon(
@@ -169,7 +169,7 @@ fun ProfileScreen(
         Text(
             text = "Nombre: ${if (name.isNotBlank()) name else "(Desconocido)"}",
             fontSize = 18.sp,
-            color = Color.Black,
+            color = Color.White,
             fontWeight = FontWeight.Medium
         )
 
@@ -178,24 +178,25 @@ fun ProfileScreen(
         Text(
             text = "Correo: ${if (email.isNotBlank()) email else "(Desconocido)"}",
             fontSize = 18.sp,
-            color = Color.Black,
+            color = Color.White,
             fontWeight = FontWeight.Medium
         )
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        // Boton para cerrar sesion
+        // Botón de cerrar sesión
         Button(
             onClick = {
                 viewModel.register("", "", "")
                 onLogout()
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C83FD))
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF7C83FD)
+            )
         ) {
             Text("Cerrar sesión", color = Color.White, fontSize = 16.sp)
         }
     }
-
 }
 
 

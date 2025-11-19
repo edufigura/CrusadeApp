@@ -105,7 +105,7 @@ fun BackToHomeButton(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Volver al Home",
-                tint = Color.Black
+                tint = Color.White
             )
         }
     }
