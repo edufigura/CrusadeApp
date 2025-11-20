@@ -1,5 +1,6 @@
 package com.example.crusadeapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -21,13 +22,16 @@ import coil.request.ImageRequest
 import com.example.crusadeapp.viewmodel.UserViewModel
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import com.example.crusadeapp.R
 
 // Data class para elementos de la lista
 data class CrusadeCardInfo(
     val id: Int,
     val title: String,
-    val image: String
+    val image: Any
 )
 
 data class WeatherInfo(
@@ -52,10 +56,11 @@ fun HomeScreen(
     val fotoUri = viewModel.fotoUri.collectAsState().value
 
     val crusades = listOf(
-        CrusadeCardInfo(1, "Indomitus Crusade", "https://i.imgur.com/y7qZ0R4.jpeg"),
-        CrusadeCardInfo(2, "Stygian Crusade", "https://i.imgur.com/1Q9ZVZJ.jpeg"),
-        CrusadeCardInfo(3, "Black Crusade", "https://i.imgur.com/Q3HfQfN.jpeg")
+        CrusadeCardInfo(1, "Indomitus Crusade", R.drawable.imagen_1),
+        CrusadeCardInfo(2, "Stygian Crusade", R.drawable.imagen_2),
+        CrusadeCardInfo(3, "Black Crusade", R.drawable.imagen_3)
     )
+
 
     // Datos falsos de clima (conecta tu API luego)
     val weather = WeatherInfo("Santiago", 22.5, "https://openweathermap.org/img/wn/10d@2x.png")
@@ -173,11 +178,20 @@ fun CrusadeImageCard(data: CrusadeCardInfo) {
             .height(140.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A))
     ) {
-        AsyncImage(
-            model = data.image,
-            contentDescription = data.title,
-            modifier = Modifier.fillMaxSize()
-        )
+        when (val img = data.image) {
+            is Int -> Image(
+                painter = painterResource(id = img),
+                contentDescription = data.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            is String -> AsyncImage(
+                model = img,
+                contentDescription = data.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
     }
 }
 

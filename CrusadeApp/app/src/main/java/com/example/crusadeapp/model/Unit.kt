@@ -25,10 +25,13 @@ data class Weapon(
     val name: String,
     val type: String,
     val range: String? = null,
-    val A: String,
+    val A: Any,
     val BS: String? = null,
     val WS: String,
     val S: Int,
     val AP: Int,
-    val D: String
-)
+    val D: Any
+) {
+    val attacksText: String get() = A.toString()
+    val damageText: String get() = D.toString()
+}

@@ -18,6 +18,10 @@ import androidx.navigation.compose.composable
 import com.example.crusadeapp.ui.screens.*
 import com.example.crusadeapp.viewmodel.UserViewModel
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.example.crusadeapp.repository.ArmyRepository
+import com.example.crusadeapp.viewmodel.ArmyViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -82,9 +86,21 @@ fun AppNavigation(navController: NavHostController, userViewModel: UserViewModel
 
         composable("list") {
             ListScreen(
-                onNavigateHome = { navController.navigate("home") }
+                onNavigateHome = { navController.navigate("home") },
+                onNavigateToArmy = { navController.navigate("army") }
             )
+        }
 
+        composable("army") {
+            val context = LocalContext.current
+            val armyRepo = remember { ArmyRepository(context) }
+            val armyVm = remember { ArmyViewModel(armyRepo) }
+
+            ArmyScreen(
+                armyViewModel = armyVm,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToList = { navController.navigate("list") }
+            )
         }
 
     }
